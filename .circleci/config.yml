@@ -1,44 +1,23 @@
+
 version: 2.1
 
-executors:
-  default-executor:
-    docker:
-      - image: circleci/node:16.20.0
+orbs: 
+    python: circleci/python@2.0.1
 
 jobs:
-  interact-with-website:
-    executor: default-executor
+  build-and-test:
+    docker:
+      - image: cimg/python:3.10.2
     steps:
       - checkout
-      - run:
-          name: Install Dependencies
+      - run: 
           command: |
-            sudo apt-get update && sudo apt-get install -y curl python3-pip
-            pip3 install selenium
-      - run:
-          name: Example cURL Request
-          command: |
-            curl -X GET https://example.com/api/endpoint -H "Authorization: Bearer $API_TOKEN"
-      - run:
-          name: Automate with Selenium
-          command: |
-            python3 <<EOF
-            from selenium import webdriver
-            from selenium.webdriver.chrome.service import Service
-            from selenium.webdriver.common.by import By
-            from selenium.webdriver.chrome.options import Options
-
-            chrome_options = Options()
-            chrome_options.add_argument("--headless")
-            driver = webdriver.Chrome(options=chrome_options)
-            driver.get("https://example.com")
-            element = driver.find_element(By.ID, "example-id")
-            element.click()
-            driver.quit()
-            EOF
+            pip install pytest
+            pip install requests
+            pytest --junitxml=test-results/junit.xml
+          path: test-results
 
 workflows:
-  version: 2
-  website-workflow:
+  testing:
     jobs:
-      - interact-with-website
+      - build-and-test
