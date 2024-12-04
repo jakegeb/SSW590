@@ -1,0 +1,56 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif; /* You can change this to your preferred font */
+}
+
+.bg-gradient {
+    background: linear-gradient(to right, #3b82f6, #9333ea); /* Adjust gradient colors as needed */
+}
+
+.container {
+    background-color: white;
+    border-radius: 1rem; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    padding: 2rem; /* Increased padding */
+    margin-bottom: 2rem; /* Space between containers */
+    width: 100%; /* Full width */
+    max-width: 800px; /* Maximum width for larger screens */
+}
+
+.header {
+    display: flex;
+    justify-content: start;
+    gap: 2rem; /* Space between tabs */
+    margin-bottom: 3rem; /* Space below header */
+}
+
+.tab-button {
+    background-color: white;
+    color: #3b82f6; /* Tab text color */
+    border-radius: 0.5rem; /* Rounded corners */
+    padding: 1rem 2rem; /* Increased padding */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+.tab-button:hover {
+    background-color: #e5e7eb; /* Light gray on hover */
+}
+
+.title {
+    font-size: 2rem; /* Title font size */
+    font-weight: bold; /* Bold title */
+    color: white; /* Title color */
+    margin-bottom: 1rem; /* Space below title */
+}
+
+.selected-date {
+    font-size: 1.5rem; /* Font size for selected date */
+    margin-top: 1rem; /* Space above selected date */
+}
+
+.calendar {
+    width: 100%; /* Full width */
+    max-width: 600px; /* Maximum width for larger screens */
+    font-size: 1.5rem; /* Increase font size for better readability */
+}
