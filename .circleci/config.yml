@@ -1,23 +1,13 @@
-
 version: 2.1
 
-orbs: 
-    python: circleci/python@2.0.1
-
 jobs:
-  build-and-test:
+  interact-with-website:
     docker:
-      - image: cimg/python:3.10.2
+      - image: circleci/node:latest
     steps:
       - checkout
-      - run: 
+      - run:
+          name: Interact with Website
           command: |
-            pip install pytest
-            pip install requests
-            pytest --junitxml=test-results/junit.xml
-          path: test-results
-
-workflows:
-  testing:
-    jobs:
-      - build-and-test
+            curl -X POST https://example.com/api -d '{"key": "value"}' \
+              -H "Content-Type: application/json"
