@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  interact-with-website:
+  build-and-test:
     docker:
       - image: circleci/node:latest
     steps:
