@@ -1,13 +1,44 @@
 version: 2.1
 
-jobs:
-  build-and-test:
+executors:
+  default-executor:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:16.20.0
+
+jobs:
+  interact-with-website:
+    executor: default-executor
     steps:
       - checkout
       - run:
-          name: Interact with Website
+          name: Install Dependencies
           command: |
-            curl -X POST https://example.com/api -d '{"key": "value"}' \
-              -H "Content-Type: application/json"
+            sudo apt-get update && sudo apt-get install -y curl python3-pip
+            pip3 install selenium
+      - run:
+          name: Example cURL Request
+          command: |
+            curl -X GET https://example.com/api/endpoint -H "Authorization: Bearer $API_TOKEN"
+      - run:
+          name: Automate with Selenium
+          command: |
+            python3 <<EOF
+            from selenium import webdriver
+            from selenium.webdriver.chrome.service import Service
+            from selenium.webdriver.common.by import By
+            from selenium.webdriver.chrome.options import Options
+
+            chrome_options = Options()
+            chrome_options.add_argument("--headless")
+            driver = webdriver.Chrome(options=chrome_options)
+            driver.get("https://example.com")
+            element = driver.find_element(By.ID, "example-id")
+            element.click()
+            driver.quit()
+            EOF
+
+workflows:
+  version: 2
+  website-workflow:
+    jobs:
+      - interact-with-website
