@@ -3,7 +3,7 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: cimg/node:16.20.0 # Use the correct Node.js image
+      - image: cimg/node:20.0.0 # Updated to Node.js 20
 
 jobs:
   install-dependencies:
