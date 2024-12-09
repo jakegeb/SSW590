@@ -49,15 +49,6 @@ jobs:
           name: Run Tests
           command: npm test
 
-  deploy:
-    executor: node-executor
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: Deploy to Production
-          command: npm run deploy # Customize this for your deployment (e.g., Vercel, AWS, Netlify)
 
 workflows:
   version: 2
@@ -70,6 +61,3 @@ workflows:
       - test:
           requires:
             - build
-      - deploy:
-          requires:
-            - test
