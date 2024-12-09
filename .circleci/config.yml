@@ -1,23 +1,75 @@
-
 version: 2.1
 
-orbs: 
-    python: circleci/python@2.0.1
+executors:
+  node-executor:
+    docker:
+      - image: circleci/node:16.20.0 # Use the Node.js version you need
 
 jobs:
-  build-and-test:
-    docker:
-      - image: cimg/python:3.10.2
+  install-dependencies:
+    executor: node-executor
     steps:
       - checkout
-      - run: 
-          command: |
-            pip install pytest
-            pip install requests
-            pytest --junitxml=test-results/junit.xml
-          path: test-results
+      - run:
+          name: Install Dependencies
+          command: npm install
+
+  build:
+    executor: node-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - nextjs-dependencies-{{ checksum "package-lock.json" }}
+            - nextjs-dependencies-
+      - run:
+          name: Install Dependencies
+          command: npm install
+      - save_cache:
+          key: nextjs-dependencies-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Build Application
+          command: npm run build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .next
+
+  test:
+    executor: node-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - nextjs-dependencies-{{ checksum "package-lock.json" }}
+            - nextjs-dependencies-
+      - run:
+          name: Run Tests
+          command: npm test
+
+  deploy:
+    executor: node-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Deploy to Production
+          command: npm run deploy # Customize this command for your deployment strategy
 
 workflows:
-  testing:
+  version: 2
+  nextjs-workflow:
     jobs:
-      - build-and-test
+      - install-dependencies
+      - build:
+          requires:
+            - install-dependencies
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - test
