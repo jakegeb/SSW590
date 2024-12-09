@@ -3,7 +3,7 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: circleci/node:16.20.0 # Use the Node.js version you need
+      - image: cimg/node:16.20.0
 
 jobs:
   install-dependencies:
@@ -57,7 +57,7 @@ jobs:
           at: .
       - run:
           name: Deploy to Production
-          command: npm run deploy # Customize this command for your deployment strategy
+          command: npm run deploy
 
 workflows:
   version: 2
