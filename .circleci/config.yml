@@ -3,7 +3,7 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: cimg/node:16.20.0
+      - image: cimg/node:16.20.0 # Use the correct Node.js image
 
 jobs:
   install-dependencies:
@@ -12,7 +12,7 @@ jobs:
       - checkout
       - run:
           name: Install Dependencies
-          command: npm install
+          command: npm install --legacy-peer-deps
 
   build:
     executor: node-executor
@@ -24,7 +24,7 @@ jobs:
             - nextjs-dependencies-
       - run:
           name: Install Dependencies
-          command: npm install
+          command: npm install --legacy-peer-deps
       - save_cache:
           key: nextjs-dependencies-{{ checksum "package-lock.json" }}
           paths:
@@ -57,7 +57,7 @@ jobs:
           at: .
       - run:
           name: Deploy to Production
-          command: npm run deploy
+          command: npm run deploy # Customize this for your deployment (e.g., Vercel, AWS, Netlify)
 
 workflows:
   version: 2
